@@ -1,0 +1,145 @@
+ActsAsWizard
+============
+Build dynamic wizards on the web with very little code.  Sticking to
+convention over configuration, I think that this plugin will be useful
+and familiar to seasoned Rails developers, but easy enough for the new
+Rails developers, too.
+
+I hope the example makes the code self explanatory.
+
+I would also love for someone to come along and help me write tests for
+this.  Not using TDD goes totally against my normal coding style.  This
+started as a spike, and morphed its way into code I didn't want to throw
+away.  Now I've gotten so excited over it that I just want to get it out
+there for feedback.
+
+Requirements
+============
+This plugin requires Scott Barron's acts_as_state_machine plugin.  It
+can be installed with the following command.
+
+>script/plugin install http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk
+
+Example
+=======
+# app/models/employee.rb
+# The symbols passed to acts_as_wizard must correspond
+# to the models that are the pages, and are in desired
+# display order
+class Employee < ActiveRecord::Base
+	acts_as_wizard :personal_information, :work_information
+end
+
+
+
+# app/models/personal_informtion.rb
+# acts_as_wizard_page is really an alias for belongs_to
+# but it makes the functionality clear
+class PersonalInformation < ActiveRecord::Base
+	acts_as_wizard_page :employee
+end
+
+
+
+# app/controllers/employees_controller.rb
+# the controller has a few notable functions that need to be called
+# also notice the page instance variable.  That is important
+# for the view helper methods
+class EmployeesController < ApplicationController
+	acts_as_wizard_controller
+		
+	def edit 
+		@employee = Employee.find(params[:id])
+		@page = get_wizard_page @employee
+	end
+	
+	def update 
+		@employee = Employee.find(params[:id])
+		@page = update_current_wizard_page @employee
+		@employee.save
+		redirect_to :action => :edit
+	end
+end
+
+
+
+# app/views/employees/edit.html.erb
+# notice the wizard partial render and the previous and next button functions
+<%=javascript_include_tag :defaults %>
+<% form_for(@employee) do |f| -%> 
+	<fieldset> 
+		<%= render_wizard_partial @employee %> 
+	</fieldset>  
+	<hr/> 
+		<table class="controls"> 
+			<tr> 
+				<td>
+					<%= previous_wizard_button @employee %>
+				</td> 
+				<td> 
+					<%= next_wizard_button %> 
+				</td> 
+			</tr> 
+		</table> 
+<% end -%>
+
+
+
+# app/views/employee_wizard_pages/_personal_information.html.erb
+# notice the name of the folder corresponds to the wizard model name
+# and the template file corresponds to the name of the page model
+# notice the text_field tag is a little different
+<h1>Personal Information</h1>
+<label for="personal_information_name">Name</label>
+<%= wizard_page_text_field page, :name %>
+
+
+
+# The wizard model doesn't have to hold any information because the pages belong to it
+class CreateEmployees < ActiveRecord::Migration
+  def self.up
+    create_table :employees do |t|
+      t.string :state
+
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :employees
+  end
+end
+
+
+
+# Migration for a wizard page holds all the information for the wizard
+class CreatePersonalInformations < ActiveRecord::Migration
+  def self.up
+    create_table :personal_informations do |t|
+      t.integer :agency_id
+      t.string :name
+
+      t.timestamps
+    end
+  end
+
+  def self.down
+    drop_table :personal_informations
+  end
+end
+
+
+
+Thank You
+=========
+Adam Klunick at Quantiverge, Inc. for having faith that there had to
+be better way to make a wizard, and for trying Rails even when he had
+never written Ruby.
+
+Scott Barron for his acts_as_state_machine plugin.
+
+Mike Hagedorn for writing a wizard how-to for Pragmatic Studios -
+Advanced Rails Recipes.  The recipe put me on this path.
+
+
+Copyright (c) 2008 Amos L. King, released under the MIT license
