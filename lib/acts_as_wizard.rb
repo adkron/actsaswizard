@@ -74,7 +74,7 @@ module AmosKing #:nodoc:
 
 				private
 				def find_page(state)
-					page_class.find_by_agency_id(self.id)
+					page_class.send("find_by_#{self.class.to_s.underscore}_id",self.id)
 				end
 			end
 			
