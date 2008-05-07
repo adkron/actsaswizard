@@ -120,8 +120,9 @@ module AmosKing #:nodoc:
 				end
 
 				# Creates a text field for the current wizard page form
-				def wizard_page_text_field(page, field)
-					text_field page.class.to_s.underscore, field, :value => page.send(field.to_s)
+				def wizard_page_text_field(page, field, opts = {})
+					opts[:value] = page.send(field.to_s)
+					text_field page.class.to_s.underscore, field, opts
 				end
 		end
 		
