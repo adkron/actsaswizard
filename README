@@ -91,7 +91,7 @@ end
 # notice the text_field tag is a little different
 <h1>Personal Information</h1>
 <label for="personal_information_name">Name</label>
-<%= wizard_page_text_field page, :name %>
+<%= wizard_page_text_field :name %>
 
 
 

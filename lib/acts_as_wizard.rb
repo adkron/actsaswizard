@@ -109,6 +109,7 @@ module AmosKing #:nodoc:
 				# Renders the proper partial for the current wizard page
 				# pages are stored in app/views/wizard_model_name_wizard_pages/_wizard_page_model_name.html.erb
 				def render_wizard_partial(main_wizard_model)
+					@page = main_wizard_model.page
 					render :partial => wizard_page_template(main_wizard_model), 
 								:locals => { :page => main_wizard_model.page}
 				end
@@ -120,9 +121,9 @@ module AmosKing #:nodoc:
 				end
 
 				# Creates a text field for the current wizard page form
-				def wizard_page_text_field(page, field, opts = {})
-					opts[:value] = page.send(field.to_s)
-					text_field page.class.to_s.underscore, field, opts
+				def wizard_page_text_field(field, opts = {})
+					opts[:value] = @page.send(field.to_s)
+					text_field @page.class.to_s.underscore, field, opts
 				end
 		end
 		
