@@ -122,7 +122,9 @@ module AmosKing #:nodoc:
 
 				# Creates a text field for the current wizard page form
 				def wizard_page_text_field(field, opts = {})
-					opts[:value] = @page.send(field.to_s)
+					if value = @page.send(field.to_s)
+						opts[:value] = value
+					end
 					text_field @page.class.to_s.underscore, field, opts
 				end
 		end
@@ -147,7 +149,7 @@ module AmosKing #:nodoc:
 				private
 				# Returns the existing wizard page model or a new one if it doesn't exist
 				def get_wizard_page(main_wizard_model)
-					main_wizard_model.page || main_wizard_model.page_class.new
+					main_wizard_model.page = (main_wizard_model.page || main_wizard_model.page_class.new)
 				end
 				
 				# Updates the current page to the next/prevous page and returns the model for that page.
