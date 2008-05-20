@@ -47,6 +47,12 @@ end
 # for the view helper methods
 class EmployeesController < ApplicationController
 	acts_as_wizard_controller
+	
+	def new
+		@employee = Employee.new
+		@employee.save
+		redirect_to edit_employee_url(@employee)
+	end
 		
 	def edit 
 		@employee = Employee.find(params[:id])
@@ -55,9 +61,14 @@ class EmployeesController < ApplicationController
 	
 	def update 
 		@employee = Employee.find(params[:id])
-		@page = update_current_wizard_page @employee
-		@employee.save
-		redirect_to :action => :edit
+		@page = get_wizard_page @employee
+		if @page.update_attributes(params[get_current_wizard_step(@employee)])
+			switch_wizard_page @employee
+			@employee.save
+			redirect_to :action => :edit
+		else
+			render :action => :edit
+		end
 	end
 end
 
@@ -116,7 +127,7 @@ end
 class CreatePersonalInformations < ActiveRecord::Migration
   def self.up
     create_table :personal_informations do |t|
-      t.integer :agency_id
+      t.integer :employee_id
       t.string :name
 
       t.timestamps

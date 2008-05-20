@@ -111,7 +111,7 @@ module AmosKing #:nodoc:
 				def render_wizard_partial(main_wizard_model)
 					@page = main_wizard_model.page
 					render :partial => wizard_page_template(main_wizard_model), 
-								:locals => { :page => main_wizard_model.page}
+								:locals => { :page => @page }
 				end
 				
 				# Returns the path to the partial for the current tempalte
@@ -152,16 +152,8 @@ module AmosKing #:nodoc:
 				
 				# Updates the current page to the next/prevous page and returns the model for that page.
 				# The returned model will be a new model if one doesn't already exist.
-				def update_current_wizard_page(main_wizard_model)
-					page = main_wizard_model.page
-					if page 
-						page.update_attributes(params[main_wizard_model.current_state]) 
-					else 
-						page = main_wizard_model.page_class.new(params[main_wizard_model.current_state]) 
-						main_wizard_model.page = page
-					end
+				def switch_wizard_page(main_wizard_model)
 					main_wizard_model.send(params[:direction])
-					page
 				end
 				
 				# returns the current page
