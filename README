@@ -78,6 +78,7 @@ end
 # notice the wizard partial render and the previous and next button functions
 <%=javascript_include_tag :defaults %>
 <% form_for(@employee) do |f| -%> 
+<%= error_messages_for :page %>
 	<fieldset> 
 		<%= render_wizard_partial @employee %> 
 	</fieldset>  
