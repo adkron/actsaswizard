@@ -48,6 +48,11 @@ module AmosKing #:nodoc:
 				def current_page
 					@current_page ||= find_page(self.current_state)
 				end
+				
+				# returns the current page
+				def get_current_wizard_step
+					current_state
+				end
 
 				# Returns the model of the page class
 				# if the state is :favorite_color the class FavoriteColor is returned
@@ -110,8 +115,7 @@ module AmosKing #:nodoc:
 				# pages are stored in app/views/wizard_model_name_wizard_pages/_wizard_page_model_name.html.erb
 				def render_wizard_partial(main_wizard_model)
 					@page = main_wizard_model.page
-					render :partial => wizard_page_template(main_wizard_model), 
-								:locals => { :page => @page }
+					render :partial => wizard_page_template(main_wizard_model)
 				end
 				
 				# Returns the path to the partial for the current tempalte
@@ -137,8 +141,6 @@ module AmosKing #:nodoc:
         def acts_as_wizard_controller
           self.extend(ClassMethods)
 					
-					helper_method :get_current_wizard_step
-					
 					self.send(:include, AmosKing::Acts::WizardController::InstanceMethods)
         end
       end
@@ -154,11 +156,6 @@ module AmosKing #:nodoc:
 				# The returned model will be a new model if one doesn't already exist.
 				def switch_wizard_page(main_wizard_model)
 					main_wizard_model.send(params[:direction])
-				end
-				
-				# returns the current page
-				def get_current_wizard_step(main_wizard_model)
-					main_wizard_model.current_state
 				end
 			end
 			
