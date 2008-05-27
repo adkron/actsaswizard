@@ -76,6 +76,11 @@ module AmosKing #:nodoc:
 				def current_template
 					current_state.to_s
 				end
+				
+				# Returns the existing wizard page model or a new one if it doesn't exist
+				def get_wizard_page
+					self.page ||= self.page_class.new
+				end
 
 				private
 				def find_page(state)
@@ -147,11 +152,6 @@ module AmosKing #:nodoc:
 			
 			module InstanceMethods
 				private
-				# Returns the existing wizard page model or a new one if it doesn't exist
-				def get_wizard_page(main_wizard_model)
-					main_wizard_model.page = (main_wizard_model.page || main_wizard_model.page_class.new)
-				end
-				
 				# Updates the current page to the next/prevous page and returns the model for that page.
 				# The returned model will be a new model if one doesn't already exist.
 				def switch_wizard_page(main_wizard_model)

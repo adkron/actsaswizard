@@ -56,12 +56,12 @@ class EmployeesController < ApplicationController
 		
 	def edit 
 		@employee = Employee.find(params[:id])
-		@page = get_wizard_page @employee
+		@page = @employee.get_wizard_page
 	end
 	
 	def update 
 		@employee = Employee.find(params[:id])
-		@page = get_wizard_page @employee
+		@page = @employee.get_wizard_page
 		if @page.update_attributes(params[@employee.get_current_wizard_step])
 			switch_wizard_page @employee
 			@employee.save
