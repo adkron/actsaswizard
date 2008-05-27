@@ -49,12 +49,12 @@ module AmosKing #:nodoc:
 					@current_page ||= find_page(self.current_state)
 				end
 				
-				# returns the current page
+				# returns a symbol for the current wizard page
 				def get_current_wizard_step
 					current_state
 				end
 
-				# Returns the model of the page class
+				# Returns the class of the current page
 				# if the state is :favorite_color the class FavoriteColor is returned
 				# and can then have methods called on it.  ie: page_class.new 
 				def page_class
