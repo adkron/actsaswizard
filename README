@@ -46,8 +46,6 @@ end
 # also notice the page instance variable.  That is important
 # for the view helper methods
 class EmployeesController < ApplicationController
-	acts_as_wizard_controller
-	
 	def new
 		@employee = Employee.new
 		@employee.save
@@ -63,7 +61,7 @@ class EmployeesController < ApplicationController
 		@employee = Employee.find(params[:id])
 		@page = @employee.get_wizard_page
 		if @page.update_attributes(params[@employee.get_current_wizard_step])
-			switch_wizard_page @employee
+			@employee.switch_wizard_page(params[:direction])
 			@employee.save
 			redirect_to :action => :edit
 		else

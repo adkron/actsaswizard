@@ -8,7 +8,3 @@ end
 ActionView::Base.class_eval do
 	include AmosKing::Acts::WizardHelper
 end
-
-ActionController::Base.class_eval do
-	include AmosKing::Acts::WizardController
-end

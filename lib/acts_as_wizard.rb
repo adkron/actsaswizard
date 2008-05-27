@@ -81,6 +81,12 @@ module AmosKing #:nodoc:
 				def get_wizard_page
 					self.page ||= self.page_class.new
 				end
+				
+				# Updates the current page to the next/prevous page and returns the model for that page.
+				# The returned model will be a new model if one doesn't already exist.
+				def switch_wizard_page(direction)
+					send(direction)
+				end
 
 				private
 				def find_page(state)
@@ -134,33 +140,6 @@ module AmosKing #:nodoc:
 					opts[:value] = @page.send(field.to_s)
 					text_field @page.class.to_s.underscore, field, opts
 				end
-		end
-		
-		module WizardController
-			def self.included(base)        #:nodoc:
-        base.extend ActMacro
-      end
-			
-			module ActMacro #:nodoc:
-				# adds some convience methods to the controller for the wizard
-        def acts_as_wizard_controller
-          self.extend(ClassMethods)
-					
-					self.send(:include, AmosKing::Acts::WizardController::InstanceMethods)
-        end
-      end
-			
-			module InstanceMethods
-				private
-				# Updates the current page to the next/prevous page and returns the model for that page.
-				# The returned model will be a new model if one doesn't already exist.
-				def switch_wizard_page(main_wizard_model)
-					main_wizard_model.send(params[:direction])
-				end
-			end
-			
-			module ClassMethods
-			end
 		end
 		
 		module WizardPage #:nodoc:
