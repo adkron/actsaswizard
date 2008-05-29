@@ -46,7 +46,7 @@ module AmosKing #:nodoc:
 			module InstanceMethods
 				# return the model for the current wizard page
 				def current_page
-					@current_page ||= find_page(self.current_state)
+					@current_page ||= find_page(self.get_current_wizard_step)
 				end
 				
 				# returns a symbol for the current wizard page
@@ -58,23 +58,23 @@ module AmosKing #:nodoc:
 				# if the state is :favorite_color the class FavoriteColor is returned
 				# and can then have methods called on it.  ie: page_class.new 
 				def page_class
-					state.to_s.classify.constantize
+					get_current_wizard_step.to_s.classify.constantize
 				end
 
 				# Returns the instance of the current page model that
 				# belongs to the wizard controller.
 				def page
-					send(state.to_s)
+					send(get_current_wizard_step.to_s)
 				end
 
 				# Used to associate a particular page model with the main wizard model
 				def page=(value)
-					send(state.to_s + '=', value)
+					send(get_current_wizard_step.to_s + '=', value)
 				end
 
 				# Returns the current state as a string
 				def current_template
-					current_state.to_s
+					get_current_wizard_step.to_s
 				end
 				
 				# Returns the existing wizard page model or a new one if it doesn't exist
