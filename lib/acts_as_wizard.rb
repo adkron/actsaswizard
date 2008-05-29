@@ -14,6 +14,13 @@ module AmosKing #:nodoc:
 					"ErrPages: At least one pages must be specified"
 				end
       end
+
+			# The Exception raised when acts_as_state_machine is not found
+			class ErrRequireAASM < Exception #:nodoc:
+				def message
+					"Requires acts as state machine plugin"
+				end
+			end
 			
 			def self.included(base)        #:nodoc:
         base.extend ActMacro
@@ -24,6 +31,7 @@ module AmosKing #:nodoc:
         def acts_as_wizard(*opts)
           self.extend(ClassMethods)
           raise ErrPages unless opts.size > 0
+					raise ErrRequireAASM unless respond_to?(:acts_as_state_machine)
 					acts_as_state_machine :initial => opts[0]
 
 					opts.each do |opt|
