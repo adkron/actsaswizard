@@ -10,4 +10,8 @@ ActiveRecord::Schema.define(:version => 1) do
 	create_table :first_pages, :force => true do |t|
     t.integer :main_model_id
   end
+
+	create_table :second_pages, :force => true do |t|
+    t.integer :main_model_id
+  end
 end

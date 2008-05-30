@@ -23,10 +23,14 @@ load(File.dirname(__FILE__) + "/schema.rb") if File.exist?(File.dirname(__FILE__
 
 
 class MainModel < ActiveRecord::Base
-	acts_as_wizard :first_page
+	acts_as_wizard :first_page, :second_page
 end
 
 class FirstPage < ActiveRecord::Base
+	acts_as_wizard_page :main_model
+end
+
+class SecondPage < ActiveRecord::Base
 	acts_as_wizard_page :main_model
 end
 
@@ -53,13 +57,6 @@ class ActsAsWizardTest < Test::Unit::TestCase
 		EmptyModel.acts_as_wizard(:foo)
 	end
 	
-	def test_current_page_raises_error_if_model_does_not_exist
-		EmptyModel.acts_as_wizard(:foo)
-		@bunk_model = EmptyModel.new
-		e = assert_raise(NoMethodError) { @bunk_model.current_page }
-		assert_equal("undefined method `to_sym' for nil:NilClass", e.message)
-	end
-	
 	def test_get_wizard_page_returns_a_new_first_page_when_there_is_no_first_page
 		@page = @main_model.get_wizard_page
 		assert_equal(FirstPage, @page.class)
@@ -71,6 +68,32 @@ class ActsAsWizardTest < Test::Unit::TestCase
 		@expected_page = @main_model.page
 		@page = @main_model.get_wizard_page
 		assert_equal(@expected_page, @page)
+	end
+	
+	def test_get_current_wizard_step_returns_first_page_on_new_model
+		assert_equal(:first_page, @main_model.get_current_wizard_step)
+	end
+	
+	def test_get_current_wizard_step_returns_second_page_after_next_called
+		@main_model.next!
+		assert_equal(:second_page, @main_model.get_current_wizard_step)
+	end
+	
+	def test_get_current_wizard_step_returns_first_page_after_next_called_and_then_previous_called
+		@main_model.next!
+		@main_model.previous!
+		assert_equal(:first_page, @main_model.get_current_wizard_step)
+	end
+	
+	def test_get_current_wizard_step_returns_first_page_if_previous_called_on_first_page
+		@main_model.previous!
+		assert_equal(:first_page, @main_model.get_current_wizard_step)
+	end
+	
+	def test_get_current_wizard_step_returns_second_page_after_next_called_and_next_called_again
+		@main_model.next!
+		@main_model.next!
+		assert_equal(:second_page, @main_model.get_current_wizard_step)
 	end
 	
 end

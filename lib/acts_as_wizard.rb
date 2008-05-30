@@ -36,7 +36,7 @@ module AmosKing #:nodoc:
 
 					opts.each do |opt|
 						has_one opt, :dependent => :destroy
-						state opt, :after => :current_page
+						state opt
 					end
 					
 					event :next do
@@ -52,11 +52,6 @@ module AmosKing #:nodoc:
       end
 			
 			module InstanceMethods
-				# return the model for the current wizard page
-				def current_page
-					@current_page ||= find_page(self.get_current_wizard_step)
-				end
-				
 				# returns a symbol for the current wizard page
 				def get_current_wizard_step
 					current_state
@@ -94,11 +89,6 @@ module AmosKing #:nodoc:
 				# The returned model will be a new model if one doesn't already exist.
 				def switch_wizard_page(direction)
 					send(direction)
-				end
-
-				private
-				def find_page(state)
-					page_class.send("find_by_#{self.class.to_s.underscore}_id",self.id)
 				end
 			end
 			
