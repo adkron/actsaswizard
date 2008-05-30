@@ -1,0 +1,18 @@
+sqlite:
+  :adapter: sqlite
+  :dbfile: wizard.sqlite.db
+sqlite3:
+  :adapter: sqlite3
+  :dbfile: wizard.sqlite3.db
+postgresql:
+  :adapter: postgresql
+  :username: postgres
+  :password: postgres
+  :database: wizard_test
+  :min_messages: ERROR
+mysql:
+  :adapter: mysql
+  :host: localhost
+  :username: rails
+  :password:
+  :database: wizard_test
