@@ -13,7 +13,7 @@ module AmosKing #:nodoc:
 				def message
 					"ErrPages: At least one pages must be specified"
 				end
-      end
+			end
 
 			# The Exception raised when acts_as_state_machine is not found
 			class ErrRequireAASM < Exception #:nodoc:
