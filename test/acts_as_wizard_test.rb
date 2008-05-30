@@ -74,6 +74,10 @@ class ActsAsWizardTest < Test::Unit::TestCase
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
+	def test_current_template_returns_current_wizard_step_as_a_string
+		assert_equal("first_page", @main_model.get_current_wizard_step.to_s)
+	end
+	
 	def test_get_current_wizard_step_returns_second_page_after_next_called
 		@main_model.next!
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
@@ -94,6 +98,15 @@ class ActsAsWizardTest < Test::Unit::TestCase
 		@main_model.next!
 		@main_model.next!
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
+	end
+	
+	def test_page_class_returns_the_class_of_the_first_page_on_a_new_wizard
+		assert_equal(FirstPage, @main_model.page_class)
+	end
+	
+	def test_page_class_returns_the_correct_class_after_chaning_pages
+		@main_model.next!
+		assert_equal(SecondPage, @main_model.page_class)
 	end
 	
 end

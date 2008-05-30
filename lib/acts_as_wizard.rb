@@ -61,18 +61,18 @@ module AmosKing #:nodoc:
 				# if the state is :favorite_color the class FavoriteColor is returned
 				# and can then have methods called on it.  ie: page_class.new 
 				def page_class
-					get_current_wizard_step.to_s.classify.constantize
+					current_template.classify.constantize
 				end
 
 				# Returns the instance of the current page model that
 				# belongs to the wizard controller.
 				def page
-					send(get_current_wizard_step.to_s)
+					send(current_template)
 				end
 
 				# Used to associate a particular page model with the main wizard model
 				def page=(value)
-					send(get_current_wizard_step.to_s + '=', value)
+					send(current_template + '=', value)
 				end
 
 				# Returns the current state as a string
