@@ -45,28 +45,28 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_current_template_returns_current_wizard_step_as_a_string
-		assert_equal("first_page", @main_model.get_current_wizard_step.to_s)
+		assert_equal("first_page", @main_model.current_template)
 	end
 	
 	def test_get_current_wizard_step_returns_second_page_after_next_called
-		@main_model.next!
+		@main_model.next_page!
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_first_page_after_next_called_and_then_previous_called
-		@main_model.next!
-		@main_model.previous!
+		@main_model.next_page!
+		@main_model.previous_page!
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_first_page_if_previous_called_on_first_page
-		@main_model.previous!
+		@main_model.previous_page!
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_second_page_after_next_called_and_next_called_again
-		@main_model.next!
-		@main_model.next!
+		@main_model.next_page!
+		@main_model.next_page!
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
 	end
 	
@@ -75,8 +75,12 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_page_class_returns_the_correct_class_after_chaning_pages
-		@main_model.next!
+		@main_model.next_page!
 		assert_equal(SecondPage, @main_model.page_class)
+	end
+	
+	def test_pages_is_assinged_correctly
+		assert_equal [:first_page, :second_page], @main_model.pages
 	end
 	
 end

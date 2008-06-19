@@ -33,6 +33,11 @@ module AmosKing #:nodoc:
           raise ErrPages unless opts.size > 0
 					raise ErrRequireAASM unless respond_to?(:acts_as_state_machine)
 					acts_as_state_machine :initial => opts[0]
+					class_inheritable_array :pages
+					self.pages = opts
+					
+					class_inheritable_accessor :current_position
+					self.current_position = 0
 
 					opts.each do |opt|
 						has_one opt, :dependent => :destroy
@@ -54,7 +59,17 @@ module AmosKing #:nodoc:
 			module InstanceMethods
 				# returns a symbol for the current wizard page
 				def get_current_wizard_step
-					current_state
+					self.pages[self.current_position]
+				end
+				
+				def next_page!
+					self.current_position += 1 unless self.current_position+1 >= self.pages.size
+					self.next!
+				end
+				
+				def previous_page!
+					self.current_position -= 1 unless self.current_position <= 0
+					self.previous!
 				end
 
 				# Returns the class of the current page
