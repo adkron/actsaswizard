@@ -102,7 +102,7 @@ end
 class CreateEmployees < ActiveRecord::Migration
   def self.up
     create_table :employees do |t|
-      t.string :state
+      t.integer :state
 
       t.timestamps
     end
