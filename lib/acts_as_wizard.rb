@@ -14,13 +14,6 @@ module AmosKing #:nodoc:
 					"ErrPages: At least one pages must be specified"
 				end
 			end
-
-			# The Exception raised when acts_as_state_machine is not found
-			class ErrRequireAASM < Exception #:nodoc:
-				def message
-					"Requires acts as state machine plugin"
-				end
-			end
 			
 			def self.included(base)        #:nodoc:
         base.extend ActMacro
@@ -31,27 +24,11 @@ module AmosKing #:nodoc:
         def acts_as_wizard(*opts)
           self.extend(ClassMethods)
           raise ErrPages unless opts.size > 0
-					raise ErrRequireAASM unless respond_to?(:acts_as_state_machine)
-					acts_as_state_machine :initial => opts[0]
-					class_inheritable_array :pages
-					self.pages = opts
+					class_inheritable_reader :pages
+					write_inheritable_attribute :pages, opts
 					
-					class_inheritable_accessor :current_position
-					self.current_position = 0
-
-					opts.each do |opt|
-						has_one opt, :dependent => :destroy
-						state opt
-					end
-					
-					event :next do
-						opts.each_cons(2) { |pair| transitions :to => pair.last, :from => pair.first }
-					end
-					
-					event :previous do
-						opts.each_cons(2) { |pair| transitions :to => pair.first, :from => pair.last }
-					end
-					
+					opts.each { |opt| has_one opt if respond_to? :has_one }
+           
 					self.send(:include, AmosKing::Acts::Wizard::InstanceMethods)
         end
       end
@@ -59,17 +36,17 @@ module AmosKing #:nodoc:
 			module InstanceMethods
 				# returns a symbol for the current wizard page
 				def get_current_wizard_step
-					self.pages[self.current_position]
+					pages[self.state || 0]
 				end
 				
-				def next_page!
-					self.current_position += 1 unless self.current_position+1 >= self.pages.size
-					self.next!
+				def next!
+				  self.state ||= 0
+					self.state += 1 unless self.state + 1 >= pages.size
 				end
 				
-				def previous_page!
-					self.current_position -= 1 unless self.current_position <= 0
-					self.previous!
+				def previous!
+				  self.state ||= 0
+					self.state -= 1 unless self.state <= 0
 				end
 
 				# Returns the class of the current page
@@ -87,7 +64,7 @@ module AmosKing #:nodoc:
 
 				# Used to associate a particular page model with the main wizard model
 				def page=(value)
-					send(current_template + '=', value)
+					send("#{current_template}=", value)
 				end
 
 				# Returns the current state as a string
@@ -166,7 +143,7 @@ module AmosKing #:nodoc:
         def acts_as_wizard_page(main_wizard_model_symbol)
           self.extend(ClassMethods)
 
-					belongs_to main_wizard_model_symbol
+					belongs_to main_wizard_model_symbol if respond_to? :belongs_to
 					
 					self.send(:include, AmosKing::Acts::Wizard::InstanceMethods)
         end

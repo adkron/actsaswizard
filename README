@@ -13,13 +13,6 @@ started as a spike, and morphed its way into code I didn't want to throw
 away.  Now I've gotten so excited over it that I just want to get it out
 there for feedback.
 
-Requirements
-============
-This plugin requires Scott Barron's acts_as_state_machine plugin.  It
-can be installed with the following command.
-
->script/plugin install http://elitists.textdriven.com/svn/plugins/acts_as_state_machine/trunk
-
 Example
 =======
 # app/models/employee.rb
@@ -145,8 +138,6 @@ Thank You
 Adam Klunick at Quantiverge, Inc. for having faith that there had to
 be better way to make a wizard, and for trying Rails even when he had
 never written Ruby.
-
-Scott Barron for his acts_as_state_machine plugin.
 
 Mike Hagedorn for writing a wizard how-to for Pragmatic Studios -
 Advanced Rails Recipes.  The recipe put me on this path.

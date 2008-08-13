@@ -10,18 +10,9 @@ class ActsAsWizardTest < Test::Unit::TestCase
 		assert_equal("ErrPages: At least one pages must be specified",AmosKing::Acts::Wizard::ErrPages.new.message)
 	end
 	
-	def test_err_pages_message
-		assert_equal("Requires acts as state machine plugin",AmosKing::Acts::Wizard::ErrRequireAASM.new.message)
-	end
-	
   def test_requires_options_for_acts_as_wizard
     assert_raise(AmosKing::Acts::Wizard::ErrPages) { EmptyModel.acts_as_wizard }
   end
-
-	def test_requires_acts_as_state_machine
-		EmptyModel.expects(:respond_to?).with(:acts_as_state_machine).returns(false)
-		assert_raise(AmosKing::Acts::Wizard::ErrRequireAASM) { EmptyModel.acts_as_wizard(:foo) }
-	end
 	
 	def test_no_errors
 		EmptyModel.acts_as_wizard(:foo)
@@ -49,24 +40,24 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_get_current_wizard_step_returns_second_page_after_next_called
-		@main_model.next_page!
+		@main_model.next!
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_first_page_after_next_called_and_then_previous_called
-		@main_model.next_page!
-		@main_model.previous_page!
+		@main_model.next!
+		@main_model.previous!
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_first_page_if_previous_called_on_first_page
-		@main_model.previous_page!
+		@main_model.previous!
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_second_page_after_next_called_and_next_called_again
-		@main_model.next_page!
-		@main_model.next_page!
+		@main_model.next!
+		@main_model.next!
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
 	end
 	
@@ -75,7 +66,7 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_page_class_returns_the_correct_class_after_chaning_pages
-		@main_model.next_page!
+		@main_model.next!
 		assert_equal(SecondPage, @main_model.page_class)
 	end
 	
