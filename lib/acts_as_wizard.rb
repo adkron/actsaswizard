@@ -130,6 +130,11 @@ module AmosKing #:nodoc:
 					opts[:value] = @page.send(field.to_s)
 					text_field @page.class.to_s.underscore, field, opts
 				end
+				
+				def wizard_page_select(field, options, opts = {})
+				  opts[:value] = @page.send(field.to_s)
+					select @page.class.to_s.underscore, field, options, opts
+			  end
 		end
 		
 		module WizardPage #:nodoc:
