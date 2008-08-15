@@ -93,9 +93,9 @@ module AmosKing #:nodoc:
 			  # Also creates a hidden field used to tell the controller which direction to go.
 				def previous_wizard_button(main_wizard_model)
 					button_to("&#8592; Previous", 
-												{:id => main_wizard_model, :action => "update"}, 
-												{:method => :put, 
-													:onclick => "document.getElementById('direction').value = 'previous!';"}) +
+                    {:id => main_wizard_model, :action => "update"}, 
+                    {:method => :put, 
+										 :onclick => "document.getElementById('direction').value = 'previous!';"}) +
 					hidden_direction_field
 				end
 				
