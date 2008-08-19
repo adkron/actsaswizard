@@ -131,6 +131,13 @@ module AmosKing #:nodoc:
 					text_field @page.class.to_s.underscore, field, opts
 				end
 				
+				# Creates a text field for the current wizard page form
+				def wizard_page_text_area(field, opts = {})
+					opts[:value] = @page.send(field.to_s)
+					text_area @page.class.to_s.underscore, field, opts
+				end
+				
+				# Creates a select field for the current wizard page form
 				def wizard_page_select(field, options, opts = {})
 				  opts[:selected] = @page.send(field.to_s)
 					select @page.class.to_s.underscore, field, options, opts
