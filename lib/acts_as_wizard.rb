@@ -128,20 +128,53 @@ module AmosKing #:nodoc:
 				# Creates a text field for the current wizard page form
 				def wizard_page_text_field(field, opts = {})
 					opts[:value] = @page.send(field.to_s)
-					text_field @page.class.to_s.underscore, field, opts
+					text_field page_object_name, field, opts
 				end
 				
 				# Creates a text field for the current wizard page form
 				def wizard_page_text_area(field, opts = {})
 					opts[:value] = @page.send(field.to_s)
-					text_area @page.class.to_s.underscore, field, opts
+					text_area page_object_name, field, opts
 				end
 				
 				# Creates a select field for the current wizard page form
 				def wizard_page_select(field, options, opts = {})
 				  opts[:selected] = @page.send(field.to_s)
-					select @page.class.to_s.underscore, field, options, opts
+					select page_object_name, field, options, opts
 			  end
+			  
+			  # Creates a check box for the current_wizard_page
+			  def wizard_page_check_box(field, opts = {}, checked_value = "1", unchecked_value = "0")
+			    opts[:checked] = checked_value == @page.send(field.to_s)
+			    check_box(page_object_name, method, opts, checked_value, unchecked_value)
+		    end
+		    
+		    # Creates a hidden field for the current wizard page
+		    def wizard_page_hidden_field(field, opts = {})
+		      opts[:value] = @page.send(field.to_s)
+		      hidden_field(page_object_name, field, options)
+	      end
+	      
+	      # Creates a label for the current wizard page
+	      def wizard_page_label(field, text = nil, opts = {})
+	        label(page_object_name, field, text, opts)
+        end
+        
+        # Creates a password field for the current wizard page
+        def wizard_page_password_field(field, opts)
+          password_field(page_object_name, field, opts)
+        end
+        
+        # Creates a radio button for the current wizard page
+        def radio_button(field, tag_value, opts = {})
+          opts[:checked] = tag_value == @page.send(field.to_s)
+          radio_button(page_object_name, method, tag_value, options)
+	      end
+	      
+		    protected
+		    def page_object_name
+		      @page.class.to_s.underscore
+	      end
 		end
 		
 		module WizardPage #:nodoc:
