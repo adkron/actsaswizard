@@ -42,11 +42,13 @@ module AmosKing #:nodoc:
 				def next!
 				  self.state ||= 0
 					self.state += 1 unless self.state + 1 >= pages.size
+					self
 				end
 				
 				def previous!
 				  self.state ||= 0
 					self.state -= 1 unless self.state <= 0
+					self
 				end
 
 				# Returns the class of the current page
