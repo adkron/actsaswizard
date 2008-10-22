@@ -93,8 +93,8 @@ module AmosKing #:nodoc:
 		module WizardHelper
 			  # Creates a button to go to the previous page in the wizard.
 			  # Also creates a hidden field used to tell the controller which direction to go.
-				def previous_wizard_button(main_wizard_model)
-					button_to("&#8592; Previous", 
+				def previous_wizard_button(main_wizard_model, label = "Previous")
+					button_to("&#8592; #{label}", 
                     {:id => main_wizard_model, :action => "update"}, 
                     {:method => :put, 
 										 :onclick => "document.getElementById('direction').value = 'previous!';"}) +
@@ -103,8 +103,8 @@ module AmosKing #:nodoc:
 				
 				# Creates a button to go to the next page in the wizard.
 			  # Also creates a hidden field used to tell the controller which direction to go.
-				def next_wizard_button
-					submit_tag("Next &#8594;") +
+				def next_wizard_button(label = "Next")
+					submit_tag("#{label} &#8594;") +
 					hidden_direction_field
 				end
 				
