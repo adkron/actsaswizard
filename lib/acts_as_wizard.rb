@@ -173,6 +173,12 @@ module AmosKing #:nodoc:
           radio_button(page_object_name, method, tag_value, options)
 	      end
 	      
+        # Creates a date select for the current wizard page
+        def wizard_page_date_select(field, opts )
+          opts[:default] = @page.send(field.to_s)
+          date_select(page_object_name, field, opts)
+        end
+
 		    protected
 		    def page_object_name
 		      @page.class.to_s.underscore
