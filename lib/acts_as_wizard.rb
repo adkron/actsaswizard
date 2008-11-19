@@ -174,7 +174,7 @@ module AmosKing #:nodoc:
 	      end
 	      
         # Creates a date select for the current wizard page
-        def wizard_page_date_select(field, opts )
+        def wizard_page_date_select(field, opts = {})
           opts[:default] = @page.send(field.to_s)
           date_select(page_object_name, field, opts)
         end
