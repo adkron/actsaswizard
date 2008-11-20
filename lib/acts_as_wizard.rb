@@ -22,7 +22,6 @@ module AmosKing #:nodoc:
 			module ActMacro #:nodoc:
 				# Sets up the main wizard model with the correct states ad transitions. 
         def acts_as_wizard(*opts)
-          self.extend(ClassMethods)
           raise ErrPages unless opts.size > 0
 					class_inheritable_reader :pages
 					write_inheritable_attribute :pages, opts
@@ -84,9 +83,6 @@ module AmosKing #:nodoc:
 				def switch_wizard_page(direction)
 					send(direction)
 				end
-			end
-			
-			module ClassMethods
 			end
 		end
 		
@@ -194,19 +190,10 @@ module AmosKing #:nodoc:
 			module ActMacro #:nodoc:
 				# Calls belongs_to with the model passed to it
         def acts_as_wizard_page(main_wizard_model_symbol)
-          self.extend(ClassMethods)
-
 					belongs_to main_wizard_model_symbol if respond_to? :belongs_to
-					
-					self.send(:include, AmosKing::Acts::Wizard::InstanceMethods)
         end
       end
-			
-			module InstanceMethods
-			end
-			
-			module ClassMethods
-			end
+      
 		end
 		
 	end
