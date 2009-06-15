@@ -164,9 +164,9 @@ module AmosKing #:nodoc:
         end
         
         # Creates a radio button for the current wizard page
-        def radio_button(field, tag_value, opts = {})
+        def wizard_page_radio_button(field, tag_value, opts = {})
           opts[:checked] = tag_value == @page.send(field.to_s)
-          radio_button(page_object_name, method, tag_value, options)
+          radio_button(page_object_name, field, tag_value, opts)
 	      end
 	      
         # Creates a date select for the current wizard page
