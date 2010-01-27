@@ -3,7 +3,7 @@ require 'test/unit'
 require 'mocha'
 gem 'activerecord'
 gem 'actionpack'
-require 'activerecord'
+require 'active_record'
 require 'action_controller'
 require 'action_controller/test_process'
 require File.expand_path(File.join(File.dirname(__FILE__), *%w[.. init]))

@@ -7,8 +7,8 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_nonactive_record_model
-	  	@main_model.next!
-	  	@main_model.next!
+	  	@main_model.next
+	  	@main_model.next
   		assert_equal(:not_ar, @main_model.get_current_wizard_step)
   end
 	
@@ -46,24 +46,24 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_get_current_wizard_step_returns_second_page_after_next_called
-		@main_model.next!
+		@main_model.next
 		assert_equal(:second_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_first_page_after_next_called_and_then_previous_called
-		@main_model.next!
-		@main_model.previous!
+		@main_model.next
+		@main_model.previous
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_first_page_if_previous_called_on_first_page
-		@main_model.previous!
+		@main_model.previous
 		assert_equal(:first_page, @main_model.get_current_wizard_step)
 	end
 	
 	def test_get_current_wizard_step_returns_last_page_after_when_next_called_on_last_page
-		@main_model.pages.size.times {@main_model.next!}
-	  @main_model.next!
+		@main_model.pages.size.times {@main_model.next}
+	  @main_model.next
 		assert_equal(:last_page, @main_model.get_current_wizard_step)
 	end
 	
@@ -72,21 +72,21 @@ class ActsAsWizardTest < Test::Unit::TestCase
 	end
 	
 	def test_page_class_returns_the_correct_class_after_chaning_pages
-		@main_model.next!
+		@main_model.next
 		assert_equal(SecondPage, @main_model.page_class)
 	end
 	
-	def test_pages_is_assinged_correctly
+	def test_pages_is_assigned_correctly
 		assert_equal [:first_page, :second_page, :not_ar, :last_page], @main_model.pages
 	end
 	
 	def test_next_can_be_chained
-	  @main_model.next!.next!
+	  @main_model.next.next
 		assert_equal(NotAr, @main_model.page_class)
   end
   
   def test_previous_can_be_chained
-    @main_model.next!.previous!.next!
+    @main_model.next.previous.next
   	assert_equal(SecondPage, @main_model.page_class)
   end
 	

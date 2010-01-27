@@ -1,9 +1,9 @@
 sqlite:
   :adapter: sqlite
-  :dbfile: wizard.sqlite.db
+  :database: wizard.sqlite.db
 sqlite3:
   :adapter: sqlite3
-  :dbfile: wizard.sqlite3.db
+  :database: wizard.sqlite3.db
 postgresql:
   :adapter: postgresql
   :username: postgres
