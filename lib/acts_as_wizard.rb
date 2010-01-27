@@ -38,13 +38,13 @@ module AmosKing #:nodoc:
 					pages[self.state || 0]
 				end
 				
-				def next!
+				def next
 				  self.state ||= 0
 					self.state += 1 unless self.state + 1 >= pages.size
 					self
 				end
 				
-				def previous!
+				def previous
 				  self.state ||= 0
 					self.state -= 1 unless self.state <= 0
 					self
@@ -81,35 +81,29 @@ module AmosKing #:nodoc:
 				# Updates the current page to the next/prevous page and returns the model for that page.
 				# The returned model will be a new model if one doesn't already exist.
 				def switch_wizard_page(direction)
-					send(direction)
+					send(direction.downcase)
 				end
 			end
 		end
 		
 		module WizardHelper
+		  
+  		  def wizard_direction_button(label = 'Next')
+  			  submit_tag("#{label}", :name => 'direction')
+  			end
+			
 			  # Creates a button to go to the previous page in the wizard.
-			  # Also creates a hidden field used to tell the controller which direction to go.
-				def previous_wizard_button(main_wizard_model, label = 'Previous')
-					button_to("&#8592; #{label}", 
-                    {:id => main_wizard_model, :action => "update"}, 
-                    {:method => :put, 
-										 :onclick => "document.getElementById('direction').value = 'previous!';"}) +
-					hidden_direction_field
+			  # Also creates a hidden field used to tell the controller which direction to go.			  
+				def previous_wizard_button(label = 'Previous')
+				  submit_tag("#{label}", :name => 'direction')
 				end
 				
 				# Creates a button to go to the next page in the wizard.
 			  # Also creates a hidden field used to tell the controller which direction to go.
 				def next_wizard_button(label = 'Next')
-					submit_tag("#{label} &#8594;") +
-					hidden_direction_field
+					submit_tag("#{label}", :name => 'direction')
 				end
-				
-				# Generates a hidden field with the default value next!, and is used in conjunction javascript
-				# to pass the correct movement in the wizard to the controller.
-				def hidden_direction_field
-					hidden_field_tag(:direction, "next!", :class => 'direction')
-				end
-				
+								
 				# Renders the proper partial for the current wizard page
 				# pages are stored in app/views/wizard_model_name_wizard_pages/_wizard_page_model_name.html.erb
 				def render_wizard_partial(main_wizard_model)
